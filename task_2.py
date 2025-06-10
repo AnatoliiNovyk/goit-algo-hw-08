@@ -1,32 +1,35 @@
 import heapq
+from typing import List, Tuple
 
-def merge_k_lists(lists):
+def merge_k_lists(lists: List[List[int]]) -> List[int]:
     """
     Об'єднує k відсортованих списків в один відсортований список.
 
     Args:
-        lists (list of lists): Список відсортованих списків.
+        lists (List[List[int]]): Список відсортованих списків.
 
     Returns:
-        list: Один об'єднаний відсортований список.
+        List[int]: Один об'єднаний відсортований список.
+        
+    Часова складність: O(N log k), де N - загальна кількість елементів, 
+                      а k - кількість списків.
+    Просторова складність: O(k) для зберігання купи.
     """
-    min_heap = []
+    # Підказки типів для змінних для кращої читабельності
+    min_heap: List[Tuple[int, int, int]] = []
     
-    # Додаємо перший елемент з кожного списку до купи
     for i, lst in enumerate(lists):
         if lst:
             # (значення, індекс_списку, індекс_елемента)
             heapq.heappush(min_heap, (lst[0], i, 0))
 
-    merged_list = []
+    merged_list: List[int] = []
 
     while min_heap:
-        # Витягуємо найменший елемент з усіх списків
         value, list_idx, element_idx = heapq.heappop(min_heap)
         
         merged_list.append(value)
 
-        # Якщо в цьому списку є ще елементи, додаємо наступний до купи
         if element_idx + 1 < len(lists[list_idx]):
             next_element_idx = element_idx + 1
             next_value = lists[list_idx][next_element_idx]
@@ -34,8 +37,9 @@ def merge_k_lists(lists):
 
     return merged_list
 
-# Приклад використання згідно з описом завдання 
-lists = [[1, 4, 5], [1, 3, 4], [2, 6]]
-merged_list = merge_k_lists(lists)
-print(f"Вхідні списки: {lists}")
-print(f"Відсортований список: {merged_list}")
+# Приклад використання
+lists_to_merge = [[1, 4, 5], [1, 3, 4], [2, 6]]
+final_list = merge_k_lists(lists_to_merge)
+
+print(f"Вхідні списки: {lists_to_merge}")
+print(f"Відсортований список: {final_list}")
